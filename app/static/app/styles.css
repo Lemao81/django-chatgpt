@@ -1,0 +1,29 @@
+ul {
+    list-style-type: none;
+}
+
+input .prompt {
+    width: 300px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+.chat-question-response {
+    margin-bottom: 20px;
+}
+
+div.chat-question {
+    margin-bottom: 5px;
+}
+
+span.chat-question {
+    background-color: #b9ebac;
+    padding: 3px;
+}
+
+span.chat-response {
+    background-color: #c4fdfd;
+    padding: 3px;
+}

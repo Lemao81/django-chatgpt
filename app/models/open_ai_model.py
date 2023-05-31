@@ -1,0 +1,2 @@
+class OpenAiModel:
+    id: str

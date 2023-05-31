@@ -1,0 +1,29 @@
+{% extends "app/_layout.html" %}
+
+{% block content %}
+<h2>CHAT</h2>
+<div class="chat-question-responses">
+    {% for question_response in question_responses %}
+    <div class="chat-question-response">
+        <div class="chat-question">
+            <span class="chat-question">Me: {{ question_response.question.content }}</span>
+        </div>
+        <div class="chat-response">
+            <span class="chat-response">AI: {{ question_response.response.content }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" name="send_button" value="Send">
+</form>
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" name="reset_button" value="Reset">
+</form>
+{% if error %}
+<span>Error: </span><span>{{ error }}</span>
+{% endif %}
+{% endblock content %}
