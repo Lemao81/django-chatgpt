@@ -13,6 +13,7 @@ from .models.chat_message import ChatMessage
 from .models.forms.prompt_form import PromptForm
 from .models.open_ai_model import OpenAiModel
 from .models.responses.chat_completion_response import ChatCompletionResponse
+from .models.responses.image_creation_response import ImageCreationResponse
 from .models.responses.open_ai_models_response import OpenAiModelsResponse
 from .models.responses.text_completion_response import TextCompletionResponse
 
@@ -24,12 +25,13 @@ def home(request: HttpRequest) -> HttpResponse:
 
 
 def qanda(request: HttpRequest) -> HttpResponse:
+    form = PromptForm()
+    answer = ''
+
     if request.method == HTTP_GET:
-        form = PromptForm()
-        answer = ''
+        pass
     elif request.method == HTTP_POST:
         form = PromptForm(request.POST)
-        answer = ''
         if form.is_valid():
             prompt = form.cleaned_data['prompt']
             _set_api_key()
@@ -100,6 +102,41 @@ def chat(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request, 'app/chat.html', context)
+
+
+def image(request: HttpRequest) -> HttpResponse:
+    form = PromptForm()
+    url = ''
+    error = ''
+
+    if request.method == HTTP_GET:
+        pass
+    elif request.method == HTTP_POST:
+        form = PromptForm(request.POST)
+        if form.is_valid():
+            prompt = form.cleaned_data['prompt']
+            _set_api_key()
+            try:
+                response_object: OpenAIObject = openai.Image.create(
+                    prompt=prompt,
+                    size='1024x1024'
+                )
+                print(response_object)
+                response = ImageCreationResponse(response_object)
+                url = response.data[0].url
+            except RateLimitError:
+                error = 'Rate limit error occurred'
+    else:
+        raise MethodNotAllowed
+
+    context = {
+        'title': 'Image',
+        'form': form,
+        'url': url,
+        'error': error
+    }
+
+    return render(request, 'app/image.html', context)
 
 
 def _get_model_list() -> list[OpenAiModel]:
